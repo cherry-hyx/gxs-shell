@@ -1,0 +1,154 @@
+stock_ad_pv               |
+| stock_admin               |
+| stock_admin_log           |
+| stock_channel             |
+| stock_document            |
+| stock_gadmin              |
+| stock_limit               |
+| stock_limit_group         |
+| stock_user                |
+| stock_user_log  
+
+
+show create table stock_ad_pv;
+show create table stock_admin;
+show create table stock_admin_log;
+show create table stock_channel;
+show create table stock_document;
+show create table stock_gadmin;
+show create table stock_limit;
+show create table stock_limit_group;
+show create table stock_user;
+show create table stock_user_log;
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE `stock_ad_pv` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `time` varchar(50) DEFAULT '0' COMMENT '时间',
+  `pv` int(11) DEFAULT '0' COMMENT '访问量',
+  `channel` tinyint(1) DEFAULT '0' COMMENT '渠道id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28537 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `stock_admin` (
+  `admin_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
+  `admin_name` varchar(20) NOT NULL COMMENT '管理员名称',
+  `admin_password` varchar(32) NOT NULL DEFAULT '' COMMENT '管理员密码',
+  `admin_login_time` int(10) NOT NULL DEFAULT '0' COMMENT '登录时间',
+  `admin_login_num` int(11) NOT NULL DEFAULT '0' COMMENT '登录次数',
+  `admin_is_super` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否超级管理员',
+  `admin_gid` smallint(6) DEFAULT '0' COMMENT '权限组ID',
+  `admin_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '账号状态：1启用 ；0禁用',
+  `admin_truename` varchar(100) NOT NULL COMMENT '管理员真实姓名',
+  `admin_department` varchar(100) NOT NULL COMMENT '所属部门',
+  `member_id` int(11) DEFAULT '0' COMMENT '关联的前台用户ID',
+  `password` varchar(255) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `remember_token` varchar(255) DEFAULT '',
+  PRIMARY KEY (`admin_id`),
+  KEY `member_id` (`admin_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8 COMMENT='管理员表';
+
+
+ CREATE TABLE `stock_admin_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content` varchar(50) NOT NULL COMMENT '操作内容',
+  `createtime` int(10) unsigned DEFAULT NULL COMMENT '发生时间',
+  `admin_name` char(20) NOT NULL COMMENT '管理员',
+  `admin_id` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT '管理员ID',
+  `ip` char(15) NOT NULL COMMENT 'IP',
+  `url` varchar(50) NOT NULL DEFAULT '' COMMENT 'act&op',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3818 DEFAULT CHARSET=utf8 COMMENT='管理员操作日志'  ;
+
+
+
+ CREATE TABLE `stock_channel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `sort` tinyint(1) DEFAULT '0' COMMENT '排序',
+  `code` varchar(30) DEFAULT NULL COMMENT 'name 的首字母缩写',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='渠道';
+
+
+
+CREATE TABLE `stock_document` (
+  `doc_id` mediumint(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `doc_code` varchar(255) NOT NULL COMMENT '调用标识码',
+  `doc_title` varchar(255) NOT NULL COMMENT '标题',
+  `doc_content` text NOT NULL COMMENT '内容',
+  `doc_time` int(10) unsigned NOT NULL COMMENT '添加时间/修改时间',
+  PRIMARY KEY (`doc_id`),
+  KEY `doc_code` (`doc_code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='系统文章表' ; 
+
+
+CREATE TABLE `stock_gadmin` (
+  `gid` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `gname` varchar(50) DEFAULT NULL COMMENT '组名',
+  `limits` text COMMENT '权限内容',
+  PRIMARY KEY (`gid`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='权限组';
+
+
+CREATE TABLE `stock_limit` (
+  `limit_id` int(5) unsigned NOT NULL AUTO_INCREMENT COMMENT '权限编号',
+  `limit__name` varchar(50) DEFAULT NULL COMMENT '权限点名称',
+  `limit_group_id` int(11) DEFAULT NULL,
+  `c` varchar(50) DEFAULT NULL COMMENT '控制器',
+  `a` varchar(50) DEFAULT NULL COMMENT '操作',
+  PRIMARY KEY (`limit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限组' ;
+
+
+CREATE TABLE `stock_limit_group` (
+  `limit_group_id` int(5) unsigned NOT NULL AUTO_INCREMENT COMMENT '权限分组编号',
+  `limit_group_name` varchar(50) DEFAULT NULL COMMENT '组名',
+  PRIMARY KEY (`limit_group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限组';
+
+
+CREATE TABLE `stock_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `phone` varchar(20) DEFAULT NULL COMMENT '电话号码',
+  `time` int(11) DEFAULT '0' COMMENT '时间',
+  `ip` varchar(50) DEFAULT NULL COMMENT 'ip地址',
+  `channel` tinyint(1) DEFAULT '0' COMMENT '渠道，1为自选股，2为财经，3为今日头条，4为深圳新渠道',
+  `from_way` tinyint(1) DEFAULT '0' COMMENT '1为抓取2为自动导入',
+  `url` varchar(255) DEFAULT NULL COMMENT '来源链接',
+  `title` varchar(100) DEFAULT NULL COMMENT '来源标题',
+  `media` varchar(255) DEFAULT NULL COMMENT '媒体名',
+  `package_id` varchar(100) DEFAULT NULL COMMENT '包名',
+  PRIMARY KEY (`id`),
+  KEY `phone` (`phone`),
+  KEY `channel` (`channel`)
+) ENGINE=InnoDB AUTO_INCREMENT=724108 DEFAULT CHARSET=utf8 ;
+
+
+
+CREATE TABLE `stock_user_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `phone` varchar(20) DEFAULT NULL COMMENT '电话号码',
+  `time` int(11) DEFAULT '0' COMMENT '时间',
+  `ip` varchar(50) DEFAULT NULL COMMENT 'ip地址',
+  `channel` tinyint(1) DEFAULT '0' COMMENT '渠道，1为自选股，2为财经，3为今日头条，4为深圳新渠道',
+  `from_way` tinyint(1) DEFAULT '0' COMMENT '1为抓取2为自动导入',
+  `url` varchar(255) DEFAULT NULL COMMENT '来源链接',
+  `title` varchar(100) DEFAULT NULL COMMENT '来源标题',
+  `media` varchar(255) DEFAULT NULL COMMENT '媒体名',
+  `package_id` varchar(100) DEFAULT NULL COMMENT '包名',
+  PRIMARY KEY (`id`),
+  KEY `phone` (`phone`)
+) ENGINE=InnoDB AUTO_INCREMENT=800228 DEFAULT CHARSET=utf8;

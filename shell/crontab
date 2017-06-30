@@ -1,0 +1,12 @@
+#############2017.6.12 by hjb#################
+00 22 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new changepositionstock &>/var/log/asyn/new_changepositionstock.log
+00 22 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new flushEntrustStock &>/var/log/asyn/new_flushEntrustStock.log
+30 09 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new UpdatePositionRatio &>/var/log/asyn/new_UpdatePositionRatio.log
+30 09 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new UpdateStockSuccessRate &>/var/log/asyn/new_UpdateStockSuccessRate.log
+00 00 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new clearDaySales &>/var/log/asyn/new_clearDaySales.log
+32 15 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new afterRuns &>/var/log/asyn/new_afterRuns.log
+20 14 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new failureCombinePrompt &>/var/log/asyn/new_failureCombinePrompt.log
+30 09 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new UpdateSellerTotalRateRank &>/var/log/asyn/new_UpdateSellerTotalRateRank.log
+10 09 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new dostkfactor &>/var/log/asyn/new_dostkfactor.log
+00 17 * * * /usr/local/php/bin/php /data/www/asyn.api/app/index.php combine_new stkfactor &>/var/log/asyn/new_stkfactor.log
+
