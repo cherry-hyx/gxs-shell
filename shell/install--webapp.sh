@@ -9,7 +9,7 @@ myweb_path=/webdir/myweb/myweb.$build_number.$build_id
 #项目配置文件
 config_path=$myweb_path/config.php
 ln -s $myweb_path/config/config.php  $config_path
-#crontab
+#crontab.txt
 ln -s   $myweb_path/config/crontab.txt  /etc/cron.d/myweb
 #初始化数据库，如果数据库不存在则自动创建
 /usr/bin/php $myweb_path/mysqlMigrations/migrate.php init
