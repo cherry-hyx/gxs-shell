@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 ######################
 ##2017.06.27####
 ## by cherry
@@ -50,7 +50,7 @@ do
 	ext_cludes="${ext_cludes} --exclude=${temp}"
 done
 
-
+tmpdir=/data/script/tmp
 baseurl=https://192.168.0.223:8443/svn
 endurl=trunk
 
@@ -126,22 +126,35 @@ tarfile(){
         echo "----不打包：${excludes} ${ext_cludes} "
 #        svn diff -r $1 | grep -i Index:| awk -F : '{print $2}' | grep -v "^\s\.$" | xargs tar zcf ${tardir}/${proj}.tar.gz >/dev/null 2>&1
 #        svn -r 380:head log -v | grep -P  '^\s+(M|A)' | awk '{print $2}' | sort | uniq | sed "s#/trunk/##"
+
+        echo > /${tmpdir}/${proj}_tmp.txt
         for x in `echo $1 | tr -s ',' ' '`
         do
             echo "打包版本：${x}"
-#            svn diff -r ${x} | grep -i Index:| awk -F : '{print $2}' | grep -v "^\s\.$" | xargs tar -rf ${tardir}/${proj}.tar ${excludes} ${ext_cludes} >/dev/null 2>&1
-            svn log -v -r ${x} | grep -P  '^\s+(M|A)' | awk '{print $2}' | sed "s#/${filetmp}/##" | sed "s#/trunk##" |sort | uniq | xargs tar -rf ${tardir}/${proj}.tar ${excludes} ${ext_cludes} >/dev/null 2>&1
+#           svn diff -r ${x} | grep -i Index:| awk -F : '{print $2}' | grep -v "^\s\.$" | xargs tar -rf ${tardir}/${proj}.tar ${excludes} ${ext_cludes} >/dev/null 2>&1
+            svn log -v -r ${x} | grep -P  '^\s+(M|A)' | awk '{print $2}' | sed "s#/${filetmp}/##" | sed "s#/trunk##" >> /${tmpdir}/${proj}_tmp.txt || exit 1
         done
-        filenum=`du -b ${tardir}/${proj}.tar | awk '{print $1}'`
-        if [ $filenum -lt 11000 ] ;then
-            rm -rf ${tardir}/${proj}.tar >/dev/null 2>&1
-            echo "压缩包为空!请查看包文件！"
+
+        cat /${tmpdir}/${proj}_tmp.txt | sort | uniq > /${tmpdir}/${proj}_tmp1.txt
+
+        echo > /${tmpdir}/${proj}.txt
+        while read line
+        do
+        if [  -f ${svnbasedir}/${proj}/${localdir}/$line  ];then
+                echo $line >> /${tmpdir}/${proj}.txt
+        fi
+        done < /${tmpdir}/${proj}_tmp1.txt
+
+#        filenum=`du -b ${tardir}/${proj}.tar.gz | awk '{print $1}'`
+        filenum=`cat /${tmpdir}/${proj}.txt | wc -l`
+        if [ $filenum -eq 0 ] ;then
+            echo "上传内容!请查看更新版本！"
             exit 1
         fi
-        echo "包内文件:"
-        tar -tf ${tardir}/${proj}.tar
-        gzip -c ${tardir}/${proj}.tar > ${tardir}/${proj}.tar.gz
-        rm -rf ${tardir}/${proj}.tar >/dev/null 2>&1
+        echo "更新文件:"
+        cat /${tmpdir}/${proj}.txt
+        echo
+        tar zcf ${tardir}/${proj}.tar.gz ${excludes} ${ext_cludes}  -T /${tmpdir}/${proj}.txt
     fi
 }
 

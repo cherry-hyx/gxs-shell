@@ -85,7 +85,8 @@ deploy() {
 	    mkdir -p ${tmpdir}
 	fi
 	echo "部署目录：${projectdir}"
-	cd ${tmpdir} && rm -rf * >/dev/null 2>&1 && extract /tmp/${tarfile} ${tmpdir}  && \cp -R * ${projectdir} >/dev/null 2>&1
+	cd ${tmpdir} && rm -rf * >/dev/null 2>&1
+	cd /tmp && extract ${tarfile} ${tmpdir} && cd ${tmpdir} && \cp -R * ${projectdir} >/dev/null 2>&1
 }
 
 newdeploy(){

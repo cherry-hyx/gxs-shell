@@ -27,7 +27,7 @@ fi
 #部署压缩包
 tarfile="$3"
 #部署目录(绝对路径),
-projectdir="$2"
+projectdir="$3"
 if [ "${projectdir:0-1:1}" == "/" ];then
     projectdir=${projectdir::-1}
 fi
@@ -81,7 +81,8 @@ deploy() {
 	if [ ! -d ${tmpdir} ];then
 	    mkdir -p ${tmpdir}
 	fi
-	cd ${tmpdir} && rm -rf * >/dev/null 2>&1 && extract /tmp/${tarfile} ${tmpdir}  && \cp -R * ${projectdir} >/dev/null 2>&1
+	cd ${tmpdir} && rm -rf * >/dev/null 2>&1
+	cd /tmp && extract ${tarfile} ${tmpdir} && cd ${tmpdir} && \cp -R * ${projectdir} >/dev/null 2>&1
 }
 
 newdeploy(){
