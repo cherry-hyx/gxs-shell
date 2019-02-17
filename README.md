@@ -1,2 +1,2 @@
-# gxs-shell
-GXS日常脚本
+# shell
+日常脚本
